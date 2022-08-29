@@ -7,7 +7,7 @@ from docarray import DocumentArray, Document
 # from clip_client import Client
 from jina import Client
 
-client = Client(host='grpcs://35aeb2a685.wolf.jina.ai')
+client = Client(host='grpcs://df155011c3.wolf.jina.ai')
 st.title('Laion400M retrieval')
 
 
