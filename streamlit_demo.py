@@ -4,10 +4,10 @@ import streamlit as st
 from docarray import DocumentArray, Document
 
 
-from clip_client import Client
+# from clip_client import Client
+from jina import Client
 
-
-client = Client('grpc://0.0.0.0:61000')
+client = Client(host='grpcs://35aeb2a685.wolf.jina.ai')
 st.title('Laion400M retrieval')
 
 
@@ -34,7 +34,10 @@ def display_results(results):
 
 
 def search(query):
-    res = client.search([query])
+    # res = client.search([query])
+    da = DocumentArray([Document(text=query)])
+    res = client.post('/search', da)
+
 
     result = res[0].matches[:10]
     display_results(result)
