@@ -8,7 +8,7 @@ from docarray import DocumentArray, Document
 from jina import Client
 
 client = Client(host='grpcs://df155011c3.wolf.jina.ai')
-st.title('Laion400M retrieval')
+st.title('Retrieval in CLIP-as-service demo')
 
 
 def display_results(results):
