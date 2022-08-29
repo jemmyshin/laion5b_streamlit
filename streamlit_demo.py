@@ -7,7 +7,7 @@ from docarray import DocumentArray, Document
 # from clip_client import Client
 from jina import Client
 
-client = Client(host='grpcs://df155011c3.wolf.jina.ai')
+client = Client(host='grpcs://5a890436b4.wolf.jina.ai')
 st.title('Retrieval in CLIP-as-service demo')
 
 
