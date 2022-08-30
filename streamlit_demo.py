@@ -17,7 +17,7 @@ def display_results(results):
 
     for k, m in enumerate(results):
         image_id = m.id
-        image_url = 'https://open-images-dataset.s3.amazonaws.com/' + image_id + '.jpg' 
+        image_url = 'https://open-images-dataset.s3.amazonaws.com/test/' + image_id + '.jpg' 
 
         col_id = 0 if k % 2 == 0 else 1
 
