@@ -3,3 +3,4 @@ jina==3.7.0
 numpy==1.22.3
 pandas==1.2.5
 streamlit==1.5.0
+Pillow==8.4.0
