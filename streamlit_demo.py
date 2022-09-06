@@ -7,7 +7,7 @@ from docarray import DocumentArray, Document
 
 from jina import Client
 
-client = Client(host='grpcs://e275ad649f.wolf.jina.ai')
+client = Client(host='grpcs://4a0cef07c6.wolf.jina.ai')
 st.title('Retrieval in CLIP-as-service demo')
 
 
@@ -37,7 +37,8 @@ def display_results(results):
 
 def search(query_da):
     res = client.post('/search', query_da)
-
+    for item in res[0].matches:
+        print(item.id, item.uri)
     result = res[0].matches[:10]
     display_results(result)
 
