@@ -6,7 +6,7 @@ import requests
 from jina import Client
 
 
-client = Client(host='grpcs://a88890e2f4.wolf.jina.ai')
+client = Client(host='grpcs://1f51c9f5b1.wolf.jina.ai')
 st.title('CLIP Search demo')
 
 
