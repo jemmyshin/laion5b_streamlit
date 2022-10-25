@@ -6,7 +6,12 @@ import requests
 from jina import Client
 
 
-client = Client(host='grpcs://1f51c9f5b1.wolf.jina.ai')
+# openimage dataset
+# client = Client(host='grpcs://1f51c9f5b1.wolf.jina.ai')
+
+# laion400m
+client = Client(host='grpcs://8fa045de50.wolf.jina.ai')
+
 st.title('CLIP Search demo')
 
 
@@ -15,17 +20,27 @@ def display_results(results):
     st.write('Search results:')
     cols = st.columns(2)
 
-    for k, m in enumerate(results):
-        image_id = m.id
-        image_url = 'https://open-images-dataset.s3.amazonaws.com/' + image_id
+    deduplicated_res = DocumentArray()
+    uri_set = set()
+    for item in results:
+        if item.uri not in uri_set:
+            deduplicated_res.append(item)
+            uri_set.add(item.uri)
+
+    for k, m in enumerate(deduplicated_res):
+        # image_id = m.id
+        # image_url = 'https://open-images-dataset.s3.amazonaws.com/' + image_id
+        print(m)
+        image_url = m.uri
 
         col_id = 0 if k % 2 == 0 else 1
 
         with cols[col_id]:
             score = m.scores['cosine'].value
             similarity = 1 - score
-            st.markdown(f'Top: [{k+1}] Similarity: ({similarity:.3f}) {image_id}')
-            print(image_url)
+            # st.markdown(f'Top: [{k+1}] Similarity: ({similarity:.3f}) {image_id}')
+            st.markdown(f'Top: [{k+1}] Title: {m.text}')
+            # print(image_url)
             cols[col_id].image(image_url)
 
     # data = [[r.text, st.image(), r.scores['cosine'].value] for r in results]
@@ -40,8 +55,14 @@ def search(query_da):
     res = client.post('/search', query_da)
     # for item in res[0].matches:
     #     print(item.id, item.uri)
-    result = res[0].matches[:10]
-    display_results(result)
+    # result = res[0].matches[:10]
+
+    result = DocumentArray(
+                        sorted(
+                            res, key=lambda m: m.scores['COSINE'].value
+                        )
+                    )
+    display_results(result[0].matches)
 
 
 menu = ['Text', 'Image']
