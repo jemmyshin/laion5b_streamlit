@@ -10,7 +10,10 @@ from jina import Client
 # client = Client(host='grpcs://1f51c9f5b1.wolf.jina.ai')
 
 # laion400m
-client = Client(host='grpcs://2e037a5082.wolf.jina.ai')
+# client = Client(host='grpcs://2e037a5082.wolf.jina.ai')
+
+# trademark dataset
+client = Client(host='grpcs://gentle-asp-671ced508f.wolf.jina.ai')
 
 st.title('CLIP Search demo')
 
@@ -20,42 +23,21 @@ def display_results(results):
     st.write('Search results:')
     cols = st.columns(2)
 
-    deduplicated_res = DocumentArray()
-    uri_set = set()
-    for item in results:
-        if item.uri not in uri_set:
-            deduplicated_res.append(item)
-            uri_set.add(item.uri)
-
-    for k, m in enumerate(deduplicated_res):
-        # image_id = m.id
-        # image_url = 'https://open-images-dataset.s3.amazonaws.com/' + image_id
-        print(m)
-        image_url = m.uri
+    for k, m in enumerate(results):
+        image_id = m.id
+        # print(image_id)
 
         col_id = 0 if k % 2 == 0 else 1
 
         with cols[col_id]:
             score = m.scores['cosine'].value
             similarity = 1 - score
-            # st.markdown(f'Top: [{k+1}] Similarity: ({similarity:.3f}) {image_id}')
-            st.markdown(f'Top: [{k+1}] Title: {m.text}')
-            # print(image_url)
-            cols[col_id].image(image_url)
-
-    # data = [[r.text, st.image(), r.scores['cosine'].value] for r in results]
-    # df = pd.DataFrame(
-    # data,
-    # columns=('caption', 'uri', 'score'))
-
-    # st.table(df)
+            st.markdown(f'Top: [{k+1}], similarity: {similarity}')
+            cols[col_id].image(st.session_state.tm_data[image_id].blob)
 
 
 def search(query_da):
     res = client.post('/search', query_da)
-    # for item in res[0].matches:
-    #     print(item.id, item.uri)
-    # result = res[0].matches[:10]
 
     result = DocumentArray(
                         sorted(
@@ -63,10 +45,15 @@ def search(query_da):
                         )
                     )
     display_results(result[0].matches)
+    #display_results(res[0].matches)
 
 
 menu = ['Text', 'Image']
 choice = st.sidebar.selectbox('Select The Input Modality: ',menu)
+
+if 'tm_data' not in st.session_state:
+    with st.spinner('Preparing data...'):
+        st.session_state.tm_data = DocumentArray.pull(name='tm_designs')
 
 if choice == 'Image':
     st.subheader('Image-Image Search')
