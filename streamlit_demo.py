@@ -6,7 +6,6 @@ import requests
 from jina import Client
 import os
 
-os.environ['JINA_AUTH_TOKEN'] = '31454a8d0823445012c6de5623aed215'
 
 # openimage dataset
 # client = Client(host='grpcs://1f51c9f5b1.wolf.jina.ai')
@@ -27,7 +26,6 @@ def display_results(results):
 
     for k, m in enumerate(results):
         image_id = m.id
-        # print(image_id)
 
         col_id = 0 if k % 2 == 0 else 1
 
@@ -60,7 +58,9 @@ if 'tm_data' not in st.session_state:
 if choice == 'Image':
     st.subheader('Image-Image Search')
     image_file = st.file_uploader('Upload Query Image', type=["png", "jpg", "jpeg"])
-
+    token = st.text_input('token', '')
+    os.environ['JINA_AUTH_TOKNE'] = token
+    
     if image_file is not None:
         img = image_file.getvalue()
         st.image(Image.open(image_file), width=250)
@@ -70,6 +70,8 @@ if choice == 'Image':
 elif choice == 'Text':
     st.subheader('Text-Image Search')
     query = st.text_input('Text Query', placeholder='Type your query here...')
+    token = st.text_input('token', '')
+    os.environ['JINA_AUTH_TOKNE'] = token
 
     query_da = DocumentArray([Document(text=query)])
 
