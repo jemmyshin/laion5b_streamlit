@@ -4,7 +4,9 @@ from docarray import DocumentArray, Document
 import json
 import requests
 from jina import Client
+import os
 
+os.environ['JINA_AUTH_TOKEN'] = '31454a8d0823445012c6de5623aed215'
 
 # openimage dataset
 # client = Client(host='grpcs://1f51c9f5b1.wolf.jina.ai')
