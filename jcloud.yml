@@ -1,0 +1,37 @@
+jtype: Flow
+version: '1'
+with:
+  protocol: 'grpc'
+  port: 41000
+  env:
+    JINA_LOG_LEVEL: DEBUG
+jcloud:
+  retention_days: -1
+executors:
+  - name: encoder
+    external: true
+    host: grpcs://api.clip.jina.ai:2096
+    grpc_metadata:
+        authorization: 31454a8d0823445012c6de5623aed215        
+    tls: true
+    jcloud:
+      resources:
+        memory: 3G
+        cpu: 1
+        storage:
+          type: efs
+          size: 10G
+    replicas: 1
+  - name: indexer
+    uses: jinahub+docker://AnnLiteIndexer/latest
+    jcloud:
+      capacity: on-demand
+      resources:
+        memory: 4G
+        cpu: 1
+        storage:
+          type: efs
+          size: 5G
+    uses_with:
+      n_dim: 768
+    timeout_ctrl: -1
