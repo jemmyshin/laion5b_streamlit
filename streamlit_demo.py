@@ -50,6 +50,9 @@ def search(query_da):
 
 menu = ['Text', 'Image']
 choice = st.sidebar.selectbox('Select The Input Modality: ',menu)
+token = st.text_input('token', '')
+os.environ['JINA_AUTH_TOKNE'] = token
+
 
 if 'tm_data' not in st.session_state:
     with st.spinner('Preparing data...'):
@@ -58,21 +61,15 @@ if 'tm_data' not in st.session_state:
 if choice == 'Image':
     st.subheader('Image-Image Search')
     image_file = st.file_uploader('Upload Query Image', type=["png", "jpg", "jpeg"])
-    token = st.text_input('token', '')
-    os.environ['JINA_AUTH_TOKNE'] = token
     
     if image_file is not None:
         img = image_file.getvalue()
         st.image(Image.open(image_file), width=250)
-
         query_da = DocumentArray([Document(text='query_img', blob=img)])
 
 elif choice == 'Text':
     st.subheader('Text-Image Search')
     query = st.text_input('Text Query', placeholder='Type your query here...')
-    token = st.text_input('token', '')
-    os.environ['JINA_AUTH_TOKNE'] = token
-
     query_da = DocumentArray([Document(text=query)])
 
 
