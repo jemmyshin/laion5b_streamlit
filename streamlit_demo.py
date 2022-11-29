@@ -14,7 +14,7 @@ import os
 # client = Client(host='grpcs://2e037a5082.wolf.jina.ai')
 
 # trademark dataset
-client = Client(host='grpcs://intent-finch-111ff35d13.wolf.jina.ai')
+client = Client(host='grpcs://rested-adder-e6364a3163.wolf.jina.ai')
 
 st.title('CLIP Search demo')
 
